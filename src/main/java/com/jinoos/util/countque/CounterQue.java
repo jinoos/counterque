@@ -28,7 +28,7 @@ public class CounterQue {
 		this.releaseTerm = releaseTerm;
 	}
 
-	public long bitSignal(String key) {
+	public long beat(String key) {
 		if (key == null)
 			throw new NullPointerException();
 		if (key.length() == 0)

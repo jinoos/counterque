@@ -23,7 +23,7 @@ public class CounterQueTest {
 			String key = "Key";
 			for (int i = 0; i < loop; i++) {
 				// counterQue.bitSignal(key + (loop*10/9));
-				counterQue.bitSignal(key + rand.nextInt(501));
+				counterQue.beat(key + rand.nextInt(501));
 				// try {
 				// Thread.sleep(1);
 				// } catch (InterruptedException e) {
