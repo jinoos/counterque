@@ -1,33 +1,75 @@
 package com.jinoos.util.countque;
 
 public class OrderedLink<T> {
-	private OrderedLinkItem<T> top;
-	private OrderedLinkItem<T> bottom;
-	private Object lock;
+	private OrderedLinkItem<T> top = null;
+	private OrderedLinkItem<T> bottom = null;
+	private Object lock = new Object();
 
-	private int size;
+	private int size = 0;
 
 	public OrderedLink() {
-		top = bottom = null;
-		size = 0;
-		lock = new Object();
 	}
-	
+
+	public void arrange(OrderedLinkItem<T> item) {
+		synchronized (lock) {
+			arrangeWithoutLock(item);
+		}
+	}
+
+	public OrderedLinkItem<T> put(OrderedLinkItem<T> item) {
+		synchronized (lock) {
+			if (bottom == null) {
+				top = bottom = item;
+				this.size++;
+				return item;
+			}
+
+			item.setUpper(bottom);
+			bottom.setLower(item);
+			bottom = item;
+			this.size++;
+			arrangeWithoutLock(item);
+			return item;
+		}
+	}
+
+	public OrderedLinkItem<T> pull(OrderedLinkItem<T> item) {
+		synchronized (lock) {
+			return pullWithoutLock(item);
+		}
+	}
+
+	public int size() {
+		return size;
+	}
+
+	public OrderedLinkItem<T> top() {
+		return top;
+	}
+
+	public OrderedLinkItem<T> bottom() {
+		return bottom;
+	}
+
 	private void arrangeWithoutLock(OrderedLinkItem<T> item) {
-		
+
 		if (item.getUpper() == null) {
 			return;
 		}
-		
+
 		OrderedLinkItem<T> curItem = item.getUpper();
+		if (!item.isGreaterThan(curItem)) {
+			return;
+		}
 		pullWithoutLock(item);
-		
+		curItem = curItem.getUpper();
+
 		while (curItem != null) {
 			if (item.isGreaterThan(curItem)) {
 				curItem = curItem.getUpper();
 				continue;
 			}
-			
+
 			if (curItem.getLower() == null) {
 				bottom = item;
 			} else {
@@ -44,37 +86,14 @@ public class OrderedLink<T> {
 			top.setUpper(item);
 			top = item;
 		}
+		size++;
 	}
 
-	public void arrange(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			arrangeWithoutLock(item);
-		}
-	}
-
-	public void put(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			if (bottom == null) {
-				top = bottom = item;
-				size++;
-				return;
-			}
-			
-			item.setUpper(bottom);
-			bottom.setLower(item);
-			bottom = item;
-			size++;
-			arrangeWithoutLock(item);
-			return;
-		}
-	}
-	
 	private OrderedLinkItem<T> pullWithoutLock(OrderedLinkItem<T> item) {
 		if (bottom == null) {
 			item.setUpper(null);
 			item.setLower(null);
-			size--;
-			return item;
+			return null;
 		}
 
 		if (item == bottom) {
@@ -101,21 +120,4 @@ public class OrderedLink<T> {
 		return item;
 	}
 
-	public OrderedLinkItem<T> pull(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			return pullWithoutLock(item);
-		}
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public OrderedLinkItem<T> getTop() {
-		return top;
-	}
-
-	public OrderedLinkItem<T> getBottom() {
-		return bottom;
-	}
 }

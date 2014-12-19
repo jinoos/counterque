@@ -20,7 +20,7 @@ public class TimeQueueTest
         int num = 1000 * 1000 * 100;
         for(;i < num; i++)
         {
-            tq.upCount();
+            tq.beat();
 //            if(tq.getSize() != size)
 //            {
 //                System.out.println("Increased size : " + tq.getSize() + ", count :" + tq.getCount());
@@ -28,7 +28,9 @@ public class TimeQueueTest
 //            }
         }
         
-        System.out.println("Count : " + tq.getCount());
+        TimeQue tq2 = tq.clone();
+        System.out.println(tq2.count());
+        System.out.println("Count : " + tq.count());
         
         long endT = System.currentTimeMillis();
 

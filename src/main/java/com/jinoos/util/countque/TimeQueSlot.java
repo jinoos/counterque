@@ -1,29 +1,25 @@
 package com.jinoos.util.countque;
 
 public class TimeQueSlot {
-	private long time;
-	private long count;
+	private long time = 0;
+	private long count = 0;
 
-	private TimeQueSlot older;
-	private TimeQueSlot newer;
+	private TimeQueSlot older = null;
+	private TimeQueSlot newer = null;
 
 	protected TimeQueSlot() {
-		clear();
 	}
 
 	protected TimeQueSlot(long time) {
-		clear();
 		this.time = time;
 	}
 
+	protected TimeQueSlot(long time, long count) {
+		this.time = time;
+		this.count = count;
+	}
 	protected void upCount() {
 		count++;
-	}
-
-	protected TimeQueSlot clear() {
-		time = count = 0;
-		older = newer = null;
-		return this;
 	}
 
 	protected long getTime() {
@@ -60,5 +56,10 @@ public class TimeQueSlot {
 	protected TimeQueSlot setNewer(TimeQueSlot newer) {
 		this.newer = newer;
 		return this;
+	}
+	
+	protected void clear() {
+		time = count = 0;
+		older = newer = null;
 	}
 }

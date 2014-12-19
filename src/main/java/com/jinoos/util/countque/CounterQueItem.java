@@ -2,7 +2,7 @@ package com.jinoos.util.countque;
 
 
 public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<String> {
-	private String data = null;
+	private String key = null;
 	private TimeQue tq = null;
 	
 	private CounterQueItem upper = null;
@@ -10,17 +10,24 @@ public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<Stri
 	private CounterQueItem newer = null;
 	private CounterQueItem older = null;
 	
-	public CounterQueItem(String data, int maxSlotCount, int term) {
-		this.data = data;
+	private CounterQueItem() {
+	}
+	
+	public CounterQueItem(String key, int maxSlotCount, int term) {
+		this.key = key;
 		this.tq = new TimeQue(maxSlotCount, term);
 	}
 	
 	public long upCount() {
-		return tq.upCount();
+		return tq.beat();
 	}
 	
 	public long getCount() {
-		return tq.getCount();
+		return tq.count(true);
+	}
+
+	public long getCount(boolean upToDate) {
+		return tq.count(upToDate);
 	}
 
 	public boolean isGreaterThan(OrderedLinkItem<String> item) {
@@ -43,8 +50,8 @@ public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<Stri
 		lower = (CounterQueItem) item;
 	}
 
-	public String getData() {
-		return data;
+	public String getKey() {
+		return key;
 	}
 
 	public LruLinkItem<String> getNewer() {
@@ -68,7 +75,13 @@ public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<Stri
 	}
 
 	public long getLong() {
-		return tq.getCount();
+		return tq.count();
 	}
 	
+	public CounterQueItem clone() {
+		CounterQueItem item = new CounterQueItem();
+		item.key = new String(this.key);
+		item.tq = this.tq.clone();
+		return item;
+	}
 }

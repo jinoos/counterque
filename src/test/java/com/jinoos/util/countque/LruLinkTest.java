@@ -16,40 +16,40 @@ public class LruLinkTest {
 		String str = new String("aaaa");
 		LruItem itemAAAA = new LruItem(str);
 		stringLru.put(itemAAAA);
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getNewest().getData());
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getOldest().getData());
-		Assert.assertEquals(stringLru.getSize(), 1);
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.newest().getKey());
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.oldest().getKey());
+		Assert.assertEquals(stringLru.size(), 1);
 		
 		stringLru.pull(itemAAAA);
-		Assert.assertEquals(stringLru.getSize(), 0);
-		Assert.assertEquals(stringLru.getNewest(), null);
-		Assert.assertEquals(stringLru.getOldest(), null);
+		Assert.assertEquals(stringLru.size(), 0);
+		Assert.assertEquals(stringLru.newest(), null);
+		Assert.assertEquals(stringLru.oldest(), null);
 
 		stringLru.put(itemAAAA);
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getNewest().getData());
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getOldest().getData());
-		Assert.assertEquals(stringLru.getSize(), 1);
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.newest().getKey());
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.oldest().getKey());
+		Assert.assertEquals(stringLru.size(), 1);
 
 		str = new String("bbbb");
 		LruItem itemBBBB = new LruItem(str);
 		stringLru.put(itemBBBB);
-		Assert.assertEquals(itemBBBB.getData(), stringLru.getNewest().getData());
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getOldest().getData());
-		Assert.assertEquals(stringLru.getSize(), 2);
+		Assert.assertEquals(itemBBBB.getKey(), stringLru.newest().getKey());
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.oldest().getKey());
+		Assert.assertEquals(stringLru.size(), 2);
 		
 		str = new String("cccc");
 		LruItem itemCCCC = new LruItem(str);
 		stringLru.put(itemCCCC);
-		Assert.assertEquals(itemCCCC.getData(), stringLru.getNewest().getData());
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getOldest().getData());
-		Assert.assertEquals(stringLru.getSize(), 3);
+		Assert.assertEquals(itemCCCC.getKey(), stringLru.newest().getKey());
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.oldest().getKey());
+		Assert.assertEquals(stringLru.size(), 3);
 
-		LruItem item = (LruItem) stringLru.getNewest().getOlder();
+		LruItem item = (LruItem) stringLru.newest().getOlder();
 		item = (LruItem) stringLru.pull(item);
 		stringLru.put(item);
-		Assert.assertEquals(itemBBBB.getData(), stringLru.getNewest().getData());
-		Assert.assertEquals(itemAAAA.getData(), stringLru.getOldest().getData());
-		Assert.assertEquals(stringLru.getSize(), 3);
+		Assert.assertEquals(itemBBBB.getKey(), stringLru.newest().getKey());
+		Assert.assertEquals(itemAAAA.getKey(), stringLru.oldest().getKey());
+		Assert.assertEquals(stringLru.size(), 3);
 	}
 	
 	class LruItem implements LruLinkItem<String> {
@@ -61,7 +61,7 @@ public class LruLinkTest {
 			data = item;
 		}
 		
-		public String getData() {
+		public String getKey() {
 			return data;
 		}
 

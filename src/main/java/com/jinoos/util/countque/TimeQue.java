@@ -6,7 +6,7 @@ public class TimeQue {
 
 	private int slotInterval;
 	private int maxSlotCount;
-
+	
 	private long lastUpdateTime = TimeQue.getCurrentTime();
 
 	public long getLastUpdateTime() {
@@ -31,37 +31,44 @@ public class TimeQue {
 		clear();
 	}
 
-	public long getCount() {
-		long time = getCurrentTime();
-		if (time != lastUpdateTime)
-			releaseOutOfInterval(time);
+	public long count() {
+		return count(true);
+	}
+	
+	public long count(boolean upToDate) {
+		if(upToDate) {
+			long time = getCurrentTime();
+			if (time != lastUpdateTime)
+				releaseOutOfInterval(time);
+		}
 		return count;
 	}
 
-	public long upCount() {
-		return upCount(getCurrentTime());
+	public long beat() {
+		return beat(getCurrentTime());
 	}
 
-	public long upCount(long currentTime) {
-		lastUpdateTime = getCurrentTime();
+	public long beat(long currentTime) {
+		lastUpdateTime = currentTime;
+		long time = currentTime;
 		if (slotInterval > 1) {
-			lastUpdateTime -= (lastUpdateTime % slotInterval);
+			time -= (lastUpdateTime % slotInterval);
 		}
 
 		TimeQueSlot slot = null;
 		if (last == null) {
 			slot = getSlot();
-			slot.setTime(lastUpdateTime);
+			slot.setTime(time);
 			last = first = slot;
 			size++;
-		} else if (last.getTime() != lastUpdateTime) {
+		} else if (last.getTime() != time) {
 			slot = getSlot();
-			slot.setTime(lastUpdateTime);
+			slot.setTime(time);
 			slot.setOlder(last);
 			last.setNewer(slot);
 			last = slot;
 			size++;
-			releaseOutOfInterval(lastUpdateTime);
+			releaseOutOfInterval(currentTime);
 		} else {
 			slot = last;
 		}
@@ -70,6 +77,29 @@ public class TimeQue {
 		count++;
 
 		return count;
+	}
+	
+	public TimeQue clone() {
+		TimeQue clone = new TimeQue(maxSlotCount, slotInterval);
+		clone.size = this.size;
+		clone.count = this.count;
+		TimeQueSlot tqs = this.first;
+		TimeQueSlot slotPrev = null;
+		for(int i = 0; i<clone.size; i++) {
+			TimeQueSlot slot = new TimeQueSlot(tqs.getTime(), tqs.getCount());
+			if(i == 0) {
+				clone.first = slot;
+			}
+			slot.setOlder(slotPrev);
+			if(slotPrev != null) {
+				slotPrev.setNewer(slot);
+			}
+			slotPrev = slot;
+			tqs = tqs.getNewer();
+		}
+		clone.last = slotPrev;
+		
+		return clone;
 	}
 
 	protected TimeQue clear() {
@@ -154,12 +184,11 @@ public class TimeQue {
 			return pool.get();
 		}
 	}
-
+	
 	private void backSlot(TimeQueSlot slot) {
 		if (pool != null) {
 			slot.clear();
 			pool.back(slot);
 		}
 	}
-
 }

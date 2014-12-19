@@ -1,7 +1,7 @@
 package com.jinoos.util.countque;
 
 public interface OrderedLinkItem<T> {
-	public T getData();
+	public T getKey();
 	public long getLong();
 	public boolean isGreaterThan(OrderedLinkItem<T> it);
 	public OrderedLinkItem<T> getUpper();

@@ -38,21 +38,21 @@ public class CounterQueTest {
 		System.out.println("end. " + (float) (endT - startT) / 1000 + ", "
 				+ (float) ((loop * round) / (float) ((endT - startT) / 1000)) / 1000000 + " MHz");
 
-		LruLink<String> lru = counterQue.getLruList();
-		LruLinkItem<String> lruItem = lru.getNewest();
+		LruLink<String> lru = counterQue.lruList();
+		LruLinkItem<String> lruItem = lru.newest();
 		int i = 0;
 		while (lruItem != null) {
 			CounterQueItem item = (CounterQueItem) lruItem;
-			System.out.println("" + ++i + " : " + item.getData() + " - " + item.getCount() + " = " + item.getLastUpdateTime());
+			System.out.println("" + ++i + " : " + item.getKey() + " - " + item.getCount() + " = " + item.getLastUpdateTime());
 			lruItem = lruItem.getOlder();
 		}
 
-		OrderedLink<String> order = counterQue.getOrderList();
-		OrderedLinkItem<String> orderItem = order.getTop();
+		OrderedLink<String> order = counterQue.orderList();
+		OrderedLinkItem<String> orderItem = order.top();
 		i = 0;
 		while (orderItem != null) {
 			CounterQueItem item = (CounterQueItem) orderItem;
-			System.out.println("Ordered " + ++i + " : " + item.getData() + " - " + item.getCount());
+			System.out.println("Ordered " + ++i + " : " + item.getKey() + " - " + item.getCount());
 			orderItem = orderItem.getLower();
 		}
 	}

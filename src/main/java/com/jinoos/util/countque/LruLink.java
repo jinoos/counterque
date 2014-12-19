@@ -12,15 +12,15 @@ public class LruLink<T> {
 		lock = new Object();
 	}
 
-	public LruLinkItem<T> getNewest() {
+	public LruLinkItem<T> newest() {
 		return newest;
 	}
 
-	public LruLinkItem<T> getOldest() {
+	public LruLinkItem<T> oldest() {
 		return oldest;
 	}
 
-	public int getSize() {
+	public int size() {
 		return size;
 	}
 	
