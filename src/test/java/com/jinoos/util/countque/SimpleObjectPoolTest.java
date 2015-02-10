@@ -38,7 +38,7 @@ public class SimpleObjectPoolTest {
 			}
 		}
 		long end = System.currentTimeMillis();
-		System.out.println("Elapsed time " + (end - start) + "ns");
+		System.out.println("Elapsed time " + (end - start) + "ms");
 		
 	}
 	
