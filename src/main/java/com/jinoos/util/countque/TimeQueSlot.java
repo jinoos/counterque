@@ -14,12 +14,17 @@ public class TimeQueSlot {
 		this.time = time;
 	}
 
-	protected TimeQueSlot(long time, long count) {
+	protected TimeQueSlot(long time, long initalCount) {
 		this.time = time;
-		this.count = count;
+		this.count = initalCount;
 	}
+	
 	protected void upCount() {
-		count++;
+		upCount(1);
+	}
+
+	protected void upCount(int count) {
+		this.count += count;
 	}
 
 	protected long getTime() {

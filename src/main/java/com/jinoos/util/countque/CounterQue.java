@@ -34,6 +34,10 @@ public class CounterQue {
 	}
 
 	public long beat(String key) {
+		return beat(key, 1);
+	}
+
+	public long beat(String key, int countIncrese) {
 		if (key == null)
 			throw new NullPointerException();
 		if (key.length() == 0)
@@ -44,7 +48,7 @@ public class CounterQue {
 			CounterQueItem item = itemMap.get(key);
 			if (item == null) {
 				item = new CounterQueItem(key, countTermSeconds / releaseTermSeconds, releaseTermSeconds);
-				count = item.upCount();
+				count = item.upCount(countIncrese);
 				while (getEvictionItem() != null)
 					;
 				orderList.put(item);

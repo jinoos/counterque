@@ -86,7 +86,6 @@ public class CounterQueThreadTest {
 		public void run() {
 			for(int i = 0; i<loop; i++) {
 				cq.beat("key" + rand.nextInt(randMax));
-//				System.out.println("Thread " + i + " : "+ Thread.currentThread().getName());
 			}
 			finished.incrementAndGet();
 		}

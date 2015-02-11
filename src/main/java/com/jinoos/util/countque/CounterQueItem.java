@@ -22,6 +22,10 @@ public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<Stri
 		return tq.beat();
 	}
 	
+	public long upCount(int countIncrese) {
+		return tq.beat(countIncrese);
+	}
+	
 	public long getCount() {
 		return tq.count(true);
 	}
