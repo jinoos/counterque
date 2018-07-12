@@ -1,23 +1,39 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.franzbecker:gradle-lombok:1.14"
+    }
+}
 
-group = 'com.jinoos.util'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: io.franzbecker.gradle.lombok.LombokPlugin
+
+group = 'com.jinoos'
 version = '0.0.1'
 
 description = """countque"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-
-
 repositories {
-     maven { url "http://repo.maven.apache.org/maven2" }
+    jcenter()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-    compile group: 'junit', name: 'junit', version:'4.12'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.6.2'
 }
