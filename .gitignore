@@ -1,6 +1,7 @@
 target/
 build/
 .gradle/
-.idea/
+gradle/
+.idea
 out/
 .settings/

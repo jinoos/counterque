@@ -1,13 +1,10 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
-
-import com.jinoos.util.countque.ObjectPool;
-import com.jinoos.util.countque.SimpleObjectPool;
 
 public class SimpleObjectPoolTest {
 	ObjectPool<String> pool = new SimpleObjectPool<String>(1000);

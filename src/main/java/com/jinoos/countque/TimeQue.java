@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 public class TimeQue {
 	private TimeQueSlot last;

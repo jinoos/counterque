@@ -1,10 +1,6 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 import org.junit.Test;
-
-import com.jinoos.util.countque.OrderedLink;
-import com.jinoos.util.countque.OrderedLinkItem;
-import com.jinoos.util.countque.TimeQue;
 
 public class OrderedLinkTest {
 

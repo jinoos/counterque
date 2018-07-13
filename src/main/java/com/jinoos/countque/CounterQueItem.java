@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 
 public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<String> {

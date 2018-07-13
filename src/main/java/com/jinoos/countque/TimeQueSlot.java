@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 public class TimeQueSlot {
 	private long time = 0;

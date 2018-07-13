@@ -1,11 +1,8 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
-
-import com.jinoos.util.countque.LruLink;
-import com.jinoos.util.countque.LruLinkItem;
 
 public class LruLinkTest {
 

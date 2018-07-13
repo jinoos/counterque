@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 import java.lang.reflect.ParameterizedType;
 

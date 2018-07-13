@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 import java.util.ArrayList;
 import java.util.List;

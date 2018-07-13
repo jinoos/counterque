@@ -1,4 +1,4 @@
-package com.jinoos.util.countque;
+package com.jinoos.countque;
 
 public class LruLink<T> {
 	private LruLinkItem<T> newest;

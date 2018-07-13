@@ -1,8 +1,8 @@
-package com.jinoos.util.countque;
-
-import java.util.Random;
+package com.jinoos.countque;
 
 import org.junit.Test;
+
+import java.util.Random;
 
 public class CounterQueTest {
 	private int capacity = 1 * 500;
