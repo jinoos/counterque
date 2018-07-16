@@ -1,4 +1,4 @@
-package com.jinoos.countque;
+package com.jinoos.objectpool;
 
 import org.junit.Test;
 

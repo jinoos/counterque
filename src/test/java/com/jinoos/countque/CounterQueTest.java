@@ -31,21 +31,21 @@ public class CounterQueTest {
 				+ (loop * round) / (float) ((endT - startT) / 1000) / 1000000 + " MHz");
 
 		LruLink<String> lru = counterQue.lruList();
-		LruLinkItem<String> lruItem = lru.newest();
+		LruLinkItem<String> lruItem = lru.getNewestItem();
 		int i = 0;
 		while (lruItem != null) {
 			CounterQueItem item = (CounterQueItem) lruItem;
 			System.out.println("" + ++i + " : " + item.getKey() + " - " + item.getCount() + " = " + item.getLastUpdateTime());
-			lruItem = lruItem.getOlder();
+			lruItem = lruItem.getOlderItem();
 		}
 
 		OrderedLink<String> order = counterQue.orderList();
-		OrderedLinkItem<String> orderItem = order.top();
+		OrderedLinkItem<String> orderItem = order.getTopItem();
 		i = 0;
 		while (orderItem != null) {
 			CounterQueItem item = (CounterQueItem) orderItem;
 			System.out.println("Ordered " + ++i + " : " + item.getKey() + " - " + item.getCount());
-			orderItem = orderItem.getLower();
+			orderItem = orderItem.getLowerItem();
 		}
 	}
 }

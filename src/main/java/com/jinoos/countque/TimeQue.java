@@ -1,6 +1,8 @@
 package com.jinoos.countque;
 
-public class TimeQue {
+import com.jinoos.objectpool.ObjectPool;
+
+class TimeQue {
 	private TimeQueSlot last;
 	private TimeQueSlot first;
 
@@ -72,8 +74,8 @@ public class TimeQue {
 		} else if (last.getTime() != time) {
 			slot = getSlot();
 			slot.setTime(time);
-			slot.setOlder(last);
-			last.setNewer(slot);
+			slot.setOlderSlot(last);
+			last.setNewerSlot(slot);
 			last = slot;
 			size++;
 			releaseOutOfInterval(currentTime);
@@ -87,7 +89,7 @@ public class TimeQue {
 		return count;
 	}
 
-	public TimeQue clone() {
+	public TimeQue copy() {
 		TimeQue clone = new TimeQue(maxSlotCount, slotInterval);
 		clone.size = this.size;
 		clone.count = this.count;
@@ -98,12 +100,12 @@ public class TimeQue {
 			if (i == 0) {
 				clone.first = slot;
 			}
-			slot.setOlder(slotPrev);
+			slot.setOlderSlot(slotPrev);
 			if (slotPrev != null) {
-				slotPrev.setNewer(slot);
+				slotPrev.setNewerSlot(slot);
 			}
 			slotPrev = slot;
-			tqs = tqs.getNewer();
+			tqs = tqs.getNewerSlot();
 		}
 		clone.last = slotPrev;
 
@@ -114,9 +116,9 @@ public class TimeQue {
 		if (first != null) {
 			TimeQueSlot slot = first;
 			while (slot != null) {
-				first = slot.getNewer();
+				first = slot.getNewerSlot();
 				if (first != null) {
-					first.setOlder(null);
+					first.setOlderSlot(null);
 				}
 				backSlot(slot);
 				slot = first;
@@ -137,14 +139,14 @@ public class TimeQue {
 
 		while (slot != null && slot.getTime() <= cutTime) {
 			this.count -= slot.getCount();
-			first = slot.getNewer();
+			first = slot.getNewerSlot();
 			backSlot(slot);
 			size--;
 
 			if (first == null) {
 				last = null;
 			} else {
-				first.setOlder(null);
+				first.setOlderSlot(null);
 			}
 
 			slot = first;

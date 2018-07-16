@@ -1,4 +1,4 @@
-package com.jinoos.countque;
+package com.jinoos.objectpool;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -19,12 +19,10 @@ public class SimpleObjectPool<T> implements ObjectPool<T> {
 		this.maxSpare = maxSpare;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private T newInstance() {
 		T instance = null;
 		try {
-			instance = (T) ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0])
-					.newInstance();
+			instance = (T) ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
 		} catch (Exception e) {
 		}
 		return instance;
@@ -35,12 +33,12 @@ public class SimpleObjectPool<T> implements ObjectPool<T> {
 		if (first == null) {
 			return newInstance();
 		}
-		T o = null;
+		T o;
 		synchronized (lock) {
 			Shell<T> s = first;
 			first = s.next;
 			first.prev = null;
-			o = (T) s.pullOut();
+			o = s.pullOut();
 			capacity--;
 		}
 		return o;
@@ -51,7 +49,7 @@ public class SimpleObjectPool<T> implements ObjectPool<T> {
 		if (capacity <= maxSpare)
 			return;
 		synchronized (lock) {
-			Shell<T> s = new Shell<T>(o);
+			Shell<T> s = new Shell<>(o);
 			if (last == null) {
 				first = last = s;
 			} else {
@@ -89,9 +87,9 @@ public class SimpleObjectPool<T> implements ObjectPool<T> {
 	@SuppressWarnings("hiding")
 	private class Shell<T> {
 		@SuppressWarnings("unused")
-		Shell<T> prev = null;
-		Shell<T> next = null;
-		T data = null;
+		Shell<T> prev;
+		Shell<T> next;
+		T data;
 
 		Shell(T o) {
 			data = o;

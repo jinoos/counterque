@@ -23,7 +23,7 @@ public class CounterQueThreadTest {
 		CounterQue counterQue = new CounterQue(capacity, countTerm, releaseTerm);
 		
 		List<Thread> threadList = new ArrayList<>();
-		
+
 		for(int i = 0; i < threadCount; i++) {
 			Thread t = new Worker(counterQue);
 			threadList.add(t);
@@ -46,21 +46,21 @@ public class CounterQueThreadTest {
 
 		
 		LruLink<String> lru = counterQue.lruList();
-		LruLinkItem<String> lruItem = lru.newest();
+		LruLinkItem<String> lruItem = lru.getNewestItem();
 		int i = 0;
 		while (lruItem != null) {
 			CounterQueItem item = (CounterQueItem) lruItem;
 			System.out.println("" + ++i + " : " + item.getKey() + " - " + item.getCount(false) + " = " + item.getLastUpdateTime());
-			lruItem = lruItem.getOlder();
+			lruItem = lruItem.getOlderItem();
 		}
 
 		OrderedLink<String> order = counterQue.orderList();
-		OrderedLinkItem<String> orderItem = order.top();
+		OrderedLinkItem<String> orderItem = order.getTopItem();
 		i = 0;
 		while (orderItem != null) {
 			CounterQueItem item = (CounterQueItem) orderItem;
 			System.out.println("Ordered " + ++i + " : " + item.getKey() + " - " + item.getCount(false));
-			orderItem = orderItem.getLower();
+			orderItem = orderItem.getLowerItem();
 		}
 		
 		List<CounterQueItem> top100 = counterQue.getTopItem(0, 100);

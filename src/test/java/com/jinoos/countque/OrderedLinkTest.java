@@ -42,19 +42,19 @@ public class OrderedLinkTest {
 			return tq.count() > it.getLong();
 		}
 
-		public OrderedLinkItem<String> getUpper() {
+		public OrderedLinkItem<String> getUpperItem() {
 			return upper;
 		}
 
-		public void setUpper(OrderedLinkItem<String> it) {
+		public void setUpperItem(OrderedLinkItem<String> it) {
 			upper = (OrderedLinkItemImpl) it;
 		}
 
-		public OrderedLinkItem<String> getLower() {
+		public OrderedLinkItem<String> getLowerItem() {
 			return lower;
 		}
 
-		public void setLower(OrderedLinkItem<String> it) {
+		public void setLowerItem(OrderedLinkItem<String> it) {
 			lower = (OrderedLinkItemImpl) it;
 		}
 

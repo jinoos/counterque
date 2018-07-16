@@ -1,4 +1,4 @@
-package com.jinoos.countque;
+package com.jinoos.objectpool;
 
 public interface ObjectPool<T> {
 	public T get();

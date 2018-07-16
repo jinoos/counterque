@@ -1,16 +1,15 @@
 package com.jinoos.countque;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class CounterQue {
-	private OrderedLink<String> orderList = null;
-	private LruLink<String> lruList = null;
-	private Map<String, CounterQueItem> itemMap = null;
-	private int maxCapacity = 0;
+	private OrderedLink<String> orderList = new OrderedLink<>();
+	private LruLink<String> lruList = new LruLink<>();
+	private Map<String, CounterQueItem> itemMap = new HashMap<>();
+	private int maxCapacity;
 
 	private int countTermSeconds = 60 * 60;
 	private int releaseTermSeconds = 60;
@@ -19,16 +18,10 @@ public class CounterQue {
 
 	public CounterQue(int maxCapacity) {
 		this.maxCapacity = maxCapacity;
-		orderList = new OrderedLink<String>();
-		lruList = new LruLink<String>();
-		itemMap = new HashMap<String, CounterQueItem>();
 	}
 
 	public CounterQue(int maxCapacity, int countTermSeconds, int releaseTermSeconds) {
 		this.maxCapacity = maxCapacity;
-		orderList = new OrderedLink<String>();
-		lruList = new LruLink<String>();
-		itemMap = new ConcurrentHashMap<String, CounterQueItem>();
 		this.countTermSeconds = countTermSeconds;
 		this.releaseTermSeconds = releaseTermSeconds;
 	}
@@ -43,7 +36,7 @@ public class CounterQue {
 		if (key.length() == 0)
 			return 0;
 
-		long count = 0;
+		long count;
 		synchronized (lock) {
 			CounterQueItem item = itemMap.get(key);
 			if (item == null) {
@@ -66,7 +59,7 @@ public class CounterQue {
 	private CounterQueItem getEvictionItem() {
 		CounterQueItem item = null;
 		if (size() >= maxCapacity) {
-			item = (CounterQueItem) lruList.oldest();
+			item = (CounterQueItem) lruList.getOldestItem();
 			if (item == null) {
 				return null;
 			}
@@ -90,14 +83,14 @@ public class CounterQue {
 	}
 
 	public List<CounterQueItem> getTopItem(int start, int size) {
-		List<CounterQueItem> list = new ArrayList<CounterQueItem>();
+		List<CounterQueItem> list = new ArrayList<>();
 		synchronized (lock) {
 			if (start >= orderList.size()) {
 				return list;
 			}
-			CounterQueItem item = (CounterQueItem) orderList.top();
+			CounterQueItem item = (CounterQueItem) orderList.getTopItem();
 			for (int i = 0; i < start; i++) {
-				item = (CounterQueItem) item.getLower();
+				item = (CounterQueItem) item.getLowerItem();
 			}
 
 			for (int i = 0; i < size; i++) {
@@ -105,20 +98,17 @@ public class CounterQue {
 					break;
 				}
 				list.add(item);
-				item = (CounterQueItem) item.getLower();
+				item = (CounterQueItem) item.getLowerItem();
 			}
 		}
 		return list;
 	}
 
 	public Map<String, CounterQueItem> getItemMap() {
-		Map<String, CounterQueItem> itemMap = new HashMap<String, CounterQueItem>();
+		Map<String, CounterQueItem> returnMap = new HashMap<>();
 		synchronized (lock) {
-			for (String key : this.itemMap.keySet()) {
-				itemMap.put(key, this.itemMap.get(key));
-			}
+		    returnMap.putAll(itemMap);
 		}
-		return itemMap;
+		return returnMap;
 	}
-
 }

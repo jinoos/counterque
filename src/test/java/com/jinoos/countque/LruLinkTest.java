@@ -13,39 +13,39 @@ public class LruLinkTest {
 		String str = "aaaa";
 		LruItem itemAAAA = new LruItem(str);
 		stringLru.put(itemAAAA);
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.newest().getKey());
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.oldest().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getNewestItem().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getOldestItem().getKey());
 		assertThat(stringLru.size()).isEqualTo(1);
 
 		stringLru.pull(itemAAAA);
 		assertThat(stringLru.size()).isEqualTo(0);
-		assertThat(stringLru.newest()).isEqualTo(null);
-		assertThat(stringLru.oldest()).isEqualTo(null);
+		assertThat(stringLru.getNewestItem()).isEqualTo(null);
+		assertThat(stringLru.getOldestItem()).isEqualTo(null);
 
 		stringLru.put(itemAAAA);
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.newest().getKey());
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.oldest().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getNewestItem().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getOldestItem().getKey());
 		assertThat(stringLru.size()).isEqualTo(1);
 
 		str = "bbbb";
 		LruItem itemBBBB = new LruItem(str);
 		stringLru.put(itemBBBB);
-		assertThat(itemBBBB.getKey()).isEqualTo(stringLru.newest().getKey());
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.oldest().getKey());
+		assertThat(itemBBBB.getKey()).isEqualTo(stringLru.getNewestItem().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getOldestItem().getKey());
 		assertThat(stringLru.size()).isEqualTo(2);
 
 		str = "cccc";
 		LruItem itemCCCC = new LruItem(str);
 		stringLru.put(itemCCCC);
-		assertThat(itemCCCC.getKey()).isEqualTo(stringLru.newest().getKey());
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.oldest().getKey());
+		assertThat(itemCCCC.getKey()).isEqualTo(stringLru.getNewestItem().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getOldestItem().getKey());
 		assertThat(stringLru.size()).isEqualTo(3);
 
-		LruItem item = (LruItem) stringLru.newest().getOlder();
+		LruItem item = (LruItem) stringLru.getNewestItem().getOlderItem();
 		item = (LruItem) stringLru.pull(item);
 		stringLru.put(item);
-		assertThat(itemBBBB.getKey()).isEqualTo(stringLru.newest().getKey());
-		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.oldest().getKey());
+		assertThat(itemBBBB.getKey()).isEqualTo(stringLru.getNewestItem().getKey());
+		assertThat(itemAAAA.getKey()).isEqualTo(stringLru.getOldestItem().getKey());
 		assertThat(stringLru.size()).isEqualTo(3);
 	}
 
@@ -62,19 +62,19 @@ public class LruLinkTest {
 			return data;
 		}
 
-		public LruLinkItem<String> getNewer() {
+		public LruLinkItem<String> getNewerItem() {
 			return newer;
 		}
 
-		public void setNewer(LruLinkItem<String> item) {
+		public void setNewerItem(LruLinkItem<String> item) {
 			newer = item;
 		}
 
-		public LruLinkItem<String> getOlder() {
+		public LruLinkItem<String> getOlderItem() {
 			return older;
 		}
 
-		public void setOlder(LruLinkItem<String> item) {
+		public void setOlderItem(LruLinkItem<String> item) {
 			older = item;
 		}
 	}

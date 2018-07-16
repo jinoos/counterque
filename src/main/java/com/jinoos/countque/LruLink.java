@@ -1,23 +1,21 @@
 package com.jinoos.countque;
 
-public class LruLink<T> {
-	private LruLinkItem<T> newest;
-	private LruLinkItem<T> oldest;
+class LruLink<T> {
+	private LruLinkItem<T> newestItem;
+	private LruLinkItem<T> oldestItem;
 	private int size;
-	private Object lock;
+	private Object lock = new Object();
 
 	public LruLink() {
-		newest = oldest = null;
-		size = 0;
-		lock = new Object();
+		// it is empty to do
 	}
 
-	public LruLinkItem<T> newest() {
-		return newest;
+	public LruLinkItem<T> getNewestItem() {
+		return newestItem;
 	}
 
-	public LruLinkItem<T> oldest() {
-		return oldest;
+	public LruLinkItem<T> getOldestItem() {
+		return oldestItem;
 	}
 
 	public int size() {
@@ -31,13 +29,13 @@ public class LruLink<T> {
 
 	public void put(LruLinkItem<T> item) {
 		synchronized (lock) {
-			if (oldest == null) {
-				newest = oldest = item;
+			if (oldestItem == null) {
+				newestItem = oldestItem = item;
 			} else {
-				item.setNewer(null);
-				newest.setNewer(item);
-				item.setOlder(newest);
-				newest = item;
+				item.setNewerItem(null);
+				newestItem.setNewerItem(item);
+				item.setOlderItem(newestItem);
+				newestItem = item;
 			}
 			size++;
 		}
@@ -45,33 +43,33 @@ public class LruLink<T> {
 
 	public LruLinkItem<T> pull(LruLinkItem<T> item) {
 		synchronized (lock) {
-			if (oldest == null) {
-				item.setNewer(null);
-				item.setOlder(null);
+			if (oldestItem == null) {
+				item.setNewerItem(null);
+				item.setOlderItem(null);
 				size--;
 				return item;
 			}
 
-			if (item == oldest) {
-				oldest = item.getNewer();
-				if(oldest != null)
-					oldest.setOlder(null);
+			if (item == oldestItem) {
+				oldestItem = item.getNewerItem();
+				if(oldestItem != null)
+					oldestItem.setOlderItem(null);
 			} else {
-				if(item.getNewer() != null)
-				item.getNewer().setOlder(item.getOlder());
+				if(item.getNewerItem() != null)
+				item.getNewerItem().setOlderItem(item.getOlderItem());
 			}
 
-			if (item == newest) {
-				newest = item.getOlder();
-				if(newest != null)
-					newest.setNewer(null);
+			if (item == newestItem) {
+				newestItem = item.getOlderItem();
+				if(newestItem != null)
+					newestItem.setNewerItem(null);
 			} else {
-				if(item.getOlder() != null)
-				item.getOlder().setNewer(item.getNewer());
+				if(item.getOlderItem() != null)
+				item.getOlderItem().setNewerItem(item.getNewerItem());
 			}
 
-			item.setNewer(null);
-			item.setOlder(null);
+			item.setNewerItem(null);
+			item.setOlderItem(null);
 			size--;
 			return item;
 		}

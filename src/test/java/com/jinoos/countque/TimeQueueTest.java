@@ -20,7 +20,7 @@ public class TimeQueueTest
             tq.beat();
         }
         
-        TimeQue tq2 = tq.clone();
+        TimeQue tq2 = tq.copy();
         System.out.println(tq2.count());
         System.out.println("Count : " + tq.count());
         

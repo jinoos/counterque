@@ -1,123 +1,131 @@
 package com.jinoos.countque;
 
-public class OrderedLink<T> {
-	private OrderedLinkItem<T> top = null;
-	private OrderedLinkItem<T> bottom = null;
-	private Object lock = new Object();
+class OrderedLink<T> {
+    private OrderedLinkItem<T> topItem = null;
+    private OrderedLinkItem<T> bottomItem = null;
+    private Object lock = new Object();
 
-	private int size = 0;
+    private int size = 0;
 
-	public OrderedLink() {
-	}
+    public OrderedLink() {
+        // Do nothing
+    }
 
-	public void arrange(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			arrangeWithoutLock(item);
-		}
-	}
+    public void arrange(OrderedLinkItem<T> item) {
+        synchronized (lock) {
+            arrangeItemsWithoutLock(item);
+        }
+    }
 
-	public OrderedLinkItem<T> put(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			if (bottom == null) {
-				top = bottom = item;
-				this.size++;
-				return item;
-			}
+    public OrderedLinkItem<T> put(OrderedLinkItem<T> item) {
+        synchronized (lock) {
+            return putWithoutLock(item);
+        }
+    }
 
-			item.setUpper(bottom);
-			bottom.setLower(item);
-			bottom = item;
-			this.size++;
-			arrangeWithoutLock(item);
-			return item;
-		}
-	}
+    public OrderedLinkItem<T> pull(OrderedLinkItem<T> item) {
+        synchronized (lock) {
+            return pullWithoutLock(item);
+        }
+    }
 
-	public OrderedLinkItem<T> pull(OrderedLinkItem<T> item) {
-		synchronized (lock) {
-			return pullWithoutLock(item);
-		}
-	}
+    public int size() {
+        return size;
+    }
 
-	public int size() {
-		return size;
-	}
+    public OrderedLinkItem<T> getTopItem() {
+        return topItem;
+    }
 
-	public OrderedLinkItem<T> top() {
-		return top;
-	}
+    public OrderedLinkItem<T> getBottomItem() {
+        return bottomItem;
+    }
 
-	public OrderedLinkItem<T> bottom() {
-		return bottom;
-	}
+    public OrderedLinkItem<T> putWithoutLock(OrderedLinkItem<T> item) {
+        if (bottomItem == null) {
+            topItem = bottomItem = item;
+            this.size++;
+            return item;
+        }
 
-	private void arrangeWithoutLock(OrderedLinkItem<T> item) {
+        item.setUpperItem(bottomItem);
+        bottomItem.setLowerItem(item);
+        bottomItem = item;
+        this.size++;
+        arrangeItemsWithoutLock(item);
+        return item;
+    }
 
-		if (item.getUpper() == null) {
-			return;
-		}
+    private void arrangeItemsWithoutLock(OrderedLinkItem<T> item) {
 
-		OrderedLinkItem<T> curItem = item.getUpper();
-		if (!item.isGreaterThan(curItem)) {
-			return;
-		}
-		pullWithoutLock(item);
-		curItem = curItem.getUpper();
+        if (item.getUpperItem() == null) {
+            return;
+        }
 
-		while (curItem != null) {
-			if (item.isGreaterThan(curItem)) {
-				curItem = curItem.getUpper();
-				continue;
-			}
+        OrderedLinkItem<T> curItem = item.getUpperItem();
+        if (!item.isGreaterThan(curItem)) {
+            return;
+        }
+        pullWithoutLock(item);
+        curItem = curItem.getUpperItem();
 
-			if (curItem.getLower() == null) {
-				bottom = item;
-			} else {
-				item.setLower(curItem.getLower());
-				item.getLower().setUpper(item);
-			}
-			curItem.setLower(item);
-			item.setUpper(curItem);
-			break;
-		}
+        while (curItem != null) {
+            if (item.isGreaterThan(curItem)) {
+                curItem = curItem.getUpperItem();
+                continue;
+            }
 
-		if (item.getUpper() == null && item.getLower() == null) {
-			item.setLower(top);
-			top.setUpper(item);
-			top = item;
-		}
-		size++;
-	}
+            if (curItem.getLowerItem() == null) {
+                bottomItem = item;
+            } else {
+                item.setLowerItem(curItem.getLowerItem());
+                item.getLowerItem().setUpperItem(item);
+            }
+            curItem.setLowerItem(item);
+            item.setUpperItem(curItem);
+            break;
+        }
 
-	private OrderedLinkItem<T> pullWithoutLock(OrderedLinkItem<T> item) {
-		if (bottom == null) {
-			item.setUpper(null);
-			item.setLower(null);
-			return null;
-		}
+        if (item.getUpperItem() == null && item.getLowerItem() == null) {
+            item.setLowerItem(topItem);
+            topItem.setUpperItem(item);
+            topItem = item;
+        }
+        size++;
+    }
 
-		if (item == bottom) {
-			bottom = item.getUpper();
-			if (bottom != null)
-				bottom.setLower(null);
-		} else {
-			if (item.getUpper() != null)
-				item.getUpper().setLower(item.getLower());
-		}
+    private OrderedLinkItem<T> pullWithoutLock(OrderedLinkItem<T> item) {
+        if (bottomItem == null) {
+            item.setUpperItem(null);
+            item.setLowerItem(null);
+            return null;
+        }
 
-		if (item == top) {
-			top = item.getLower();
-			if (top != null)
-				top.setUpper(null);
-		} else {
-			if (item.getLower() != null)
-				item.getLower().setUpper(item.getUpper());
-		}
+        if (item == bottomItem) {
+            bottomItem = item.getUpperItem();
+            if (bottomItem != null) {
+                bottomItem.setLowerItem(null);
+            }
+        } else {
+            if (item.getUpperItem() != null) {
+                item.getUpperItem().setLowerItem(item.getLowerItem());
+            }
+        }
 
-		item.setUpper(null);
-		item.setLower(null);
-		size--;
-		return item;
-	}
+        if (item == topItem) {
+            topItem = item.getLowerItem();
+            if (topItem != null) {
+                topItem.setUpperItem(null);
+            }
+        } else {
+            if (item.getLowerItem() != null) {
+                item.getLowerItem().setUpperItem(item.getUpperItem());
+            }
+        }
 
+        item.setUpperItem(null);
+        item.setLowerItem(null);
+        size--;
+        return item;
+    }
 }

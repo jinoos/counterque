@@ -1,9 +1,9 @@
 package com.jinoos.countque;
 
-public interface LruLinkItem<T> {
+interface LruLinkItem<T> {
 	public T getKey();
-	public LruLinkItem<T> getNewer();
-	public void setNewer(LruLinkItem<T> item);
-	public LruLinkItem<T> getOlder();
-	public void setOlder(LruLinkItem<T> item);
+	public LruLinkItem<T> getNewerItem();
+	public void setNewerItem(LruLinkItem<T> item);
+	public LruLinkItem<T> getOlderItem();
+	public void setOlderItem(LruLinkItem<T> item);
 }

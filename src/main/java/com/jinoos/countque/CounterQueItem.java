@@ -1,91 +1,90 @@
 package com.jinoos.countque;
 
-
 public class CounterQueItem implements LruLinkItem<String>, OrderedLinkItem<String> {
 	private String key = null;
-	private TimeQue tq = null;
+	private TimeQue timeQue = null;
 	
-	private CounterQueItem upper = null;
-	private CounterQueItem lower = null;
-	private CounterQueItem newer = null;
-	private CounterQueItem older = null;
+	private CounterQueItem upperItem = null;
+	private CounterQueItem lowerItem = null;
+	private CounterQueItem newerItem = null;
+	private CounterQueItem olderItem = null;
 	
 	private CounterQueItem() {
 	}
 	
 	public CounterQueItem(String key, int maxSlotCount, int term) {
 		this.key = key;
-		this.tq = new TimeQue(maxSlotCount, term);
+		this.timeQue = new TimeQue(maxSlotCount, term);
 	}
 	
 	public long upCount() {
-		return tq.beat();
+		return timeQue.beat();
 	}
 	
 	public long upCount(int countIncrese) {
-		return tq.beat(countIncrese);
+		return timeQue.beat(countIncrese);
 	}
 	
 	public long getCount() {
-		return tq.count(true);
+		return timeQue.count(true);
 	}
 
 	public long getCount(boolean upToDate) {
-		return tq.count(upToDate);
+		return timeQue.count(upToDate);
 	}
 
 	public boolean isGreaterThan(OrderedLinkItem<String> item) {
 		return getCount() > ((CounterQueItem) item).getCount();
 	}
 
-	public OrderedLinkItem<String> getUpper() {
-		return upper;
+	public OrderedLinkItem<String> getUpperItem() {
+		return upperItem;
 	}
 
-	public void setUpper(OrderedLinkItem<String> item) {
-		upper = (CounterQueItem) item;
+	public void setUpperItem(OrderedLinkItem<String> item) {
+		upperItem = (CounterQueItem) item;
 	}
 
-	public OrderedLinkItem<String> getLower() {
-		return lower;
+	public OrderedLinkItem<String> getLowerItem() {
+		return lowerItem;
 	}
 
-	public void setLower(OrderedLinkItem<String> item) {
-		lower = (CounterQueItem) item;
+	public void setLowerItem(OrderedLinkItem<String> item) {
+		lowerItem = (CounterQueItem) item;
 	}
 
 	public String getKey() {
 		return key;
 	}
 
-	public LruLinkItem<String> getNewer() {
-		return newer;
+	public LruLinkItem<String> getNewerItem() {
+		return newerItem;
 	}
 
-	public void setNewer(LruLinkItem<String> item) {
-		newer = (CounterQueItem) item;
+	public void setNewerItem(LruLinkItem<String> item) {
+		newerItem = (CounterQueItem) item;
 	}
 
-	public LruLinkItem<String> getOlder() {
-		return older;
+	public LruLinkItem<String> getOlderItem() {
+		return olderItem;
 	}
 
-	public void setOlder(LruLinkItem<String> item) {
-		older = (CounterQueItem) item;
+	public void setOlderItem(LruLinkItem<String> item) {
+		olderItem = (CounterQueItem) item;
 	}
 	
 	public long getLastUpdateTime() {
-		return tq.getLastUpdateTime();
+		return timeQue.getLastUpdateTime();
 	}
 
 	public long getLong() {
-		return tq.count();
+		return timeQue.count();
 	}
 	
-	public CounterQueItem clone() {
+	public CounterQueItem copy() {
 		CounterQueItem item = new CounterQueItem();
-		item.key = new String(this.key);
-		item.tq = this.tq.clone();
+		item.key = String.valueOf(this.key);
+		item.timeQue = this.timeQue.copy();
 		return item;
 	}
 }
