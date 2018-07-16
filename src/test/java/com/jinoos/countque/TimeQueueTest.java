@@ -9,8 +9,7 @@ public class TimeQueueTest
     public void test()
     {
         TimeQue tq = new TimeQue(5, 1);
-        //TimeQueue tq = new ConcurrentTimeQueue(120, 1);
-        
+
         long startT = System.currentTimeMillis();
         
         System.out.println("start");
@@ -19,11 +18,6 @@ public class TimeQueueTest
         for(;i < num; i++)
         {
             tq.beat();
-//            if(tq.getSize() != size)
-//            {
-//                System.out.println("Increased size : " + tq.getSize() + ", count :" + tq.getCount());
-//                size = tq.getSize();
-//            }
         }
         
         TimeQue tq2 = tq.clone();
@@ -32,7 +26,7 @@ public class TimeQueueTest
         
         long endT = System.currentTimeMillis();
 
-        System.out.println("end. " + (float)(endT - startT)/1000 + ", " + (float)((num)/(float)((endT - startT)/1000))/1000000 + " MHz");
+        System.out.println("end. " + (float)(endT - startT)/1000 + ", " + (num)/(float)((endT - startT)/1000) /1000000 + " MHz");
     }
 
 }

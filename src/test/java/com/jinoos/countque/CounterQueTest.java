@@ -5,38 +5,30 @@ import org.junit.Test;
 import java.util.Random;
 
 public class CounterQueTest {
-	private int capacity = 1 * 500;
-	private int countTerm = 20;
+	private int capacity = 500;
 	private int releaseTerm = 10;
-
 	private int loop = capacity;
-	private int round = 20000 * 1;
 
 	@Test
 	public void basicTest() {
+		int countTerm = 20;
 		CounterQue counterQue = new CounterQue(capacity, countTerm, releaseTerm);
 
 		long startT = System.currentTimeMillis();
-		long endT = System.currentTimeMillis();
+		long endT;
 		Random rand = new Random();
+		int round = 20000;
 		for (int j = 0; j < round; j++) {
 			String key = "Key";
 			for (int i = 0; i < loop; i++) {
-				// counterQue.bitSignal(key + (loop*10/9));
 				counterQue.beat(key + rand.nextInt(501));
-				// try {
-				// Thread.sleep(1);
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// }
 			}
-			endT = System.currentTimeMillis();
 		}
 
 		endT = System.currentTimeMillis();
 
 		System.out.println("end. " + (float) (endT - startT) / 1000 + ", "
-				+ (float) ((loop * round) / (float) ((endT - startT) / 1000)) / 1000000 + " MHz");
+				+ (loop * round) / (float) ((endT - startT) / 1000) / 1000000 + " MHz");
 
 		LruLink<String> lru = counterQue.lruList();
 		LruLinkItem<String> lruItem = lru.newest();

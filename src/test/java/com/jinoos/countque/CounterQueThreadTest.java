@@ -1,18 +1,18 @@
 package com.jinoos.countque;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
-
 public class CounterQueThreadTest {
-	private int capacity = 1 * 500;
+	private int capacity = 500;
 	private int countTerm = 10;
 	private int releaseTerm = 1;
 
-	AtomicInteger finished = new AtomicInteger();
+	private AtomicInteger finished = new AtomicInteger();
 	int threadCount = 100;
 	int loop = 1000 * 10;
 	int randMax = capacity;
@@ -22,7 +22,7 @@ public class CounterQueThreadTest {
 		finished.set(0);
 		CounterQue counterQue = new CounterQue(capacity, countTerm, releaseTerm);
 		
-		List<Thread> threadList = new ArrayList<Thread>();
+		List<Thread> threadList = new ArrayList<>();
 		
 		for(int i = 0; i < threadCount; i++) {
 			Thread t = new Worker(counterQue);
@@ -42,7 +42,7 @@ public class CounterQueThreadTest {
 		}
 		long endT = System.currentTimeMillis();
 		System.out.println("end. " + (float) (endT - startT) / 1000 + ", "
-				+ (float) ((loop * threadCount) / (float) ((endT - startT) / 1000)) / 1000000 + " MHz");
+				+ (loop * threadCount) / (float) ((endT - startT) / 1000) / 1000000 + " MHz");
 
 		
 		LruLink<String> lru = counterQue.lruList();
@@ -76,10 +76,10 @@ public class CounterQueThreadTest {
 	}
 	
 	class Worker extends Thread {
-		CounterQue cq = null;
+		CounterQue cq;
 		Random rand = new Random();
 		
-		public Worker(CounterQue cq) {
+		Worker(CounterQue cq) {
 			this.cq = cq;
 		}
 		

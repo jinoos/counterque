@@ -6,7 +6,7 @@ public class OrderedLinkTest {
 
 	@Test
 	public void test() {
-		OrderedLink<String> order = new OrderedLink<String>();
+		OrderedLink<String> order = new OrderedLink<>();
 		String aaa = "aaaa";
 		OrderedLinkItemImpl itemAAA = new OrderedLinkItemImpl(aaa);
 		itemAAA.upCount();
@@ -20,17 +20,16 @@ public class OrderedLinkTest {
 		itemBBB.upCount();
 		order.arrange(itemBBB);
 		System.out.println("Order size : " + order.size());
-		bbb = "";
 	}
 	
 	class OrderedLinkItemImpl implements OrderedLinkItem<String> {
-		String data = null;
-		TimeQue tq = null;
+		String data;
+		TimeQue tq;
 		
 		OrderedLinkItemImpl upper;
 		OrderedLinkItemImpl lower;
 		
-		public OrderedLinkItemImpl(String data) {
+		OrderedLinkItemImpl(String data) {
 			this.data = data;
 			this.tq = new TimeQue(5, 1);
 		}
